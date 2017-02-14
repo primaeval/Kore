@@ -1,0 +1,71 @@
+Activity Resolver Table:
+  Full MIME Types:
+      text/plain:
+        210d7818 org.xbmc.kore/.ui.sections.remote.RemoteActivity
+
+  Base MIME Types:
+      text:
+        210d7818 org.xbmc.kore/.ui.sections.remote.RemoteActivity
+
+  Schemes:
+      http:
+        210d7818 org.xbmc.kore/.ui.sections.remote.RemoteActivity
+      https:
+        210d7818 org.xbmc.kore/.ui.sections.remote.RemoteActivity
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        210d7818 org.xbmc.kore/.ui.sections.remote.RemoteActivity
+
+  MIME Typed Actions:
+      android.intent.action.SEND:
+        210d7818 org.xbmc.kore/.ui.sections.remote.RemoteActivity
+
+Registered ContentProviders:
+  org.xbmc.kore/.provider.MediaProvider:
+    Provider{27e3a271 org.xbmc.kore/.provider.MediaProvider}
+
+ContentProvider Authorities:
+  [org.xbmc.kore.provider]:
+    Provider{27e3a271 org.xbmc.kore/.provider.MediaProvider}
+      applicationInfo=ApplicationInfo{2bd0c856 org.xbmc.kore}
+
+Key Set Manager:
+  [org.xbmc.kore]
+      Signing KeySets: 825
+
+Packages:
+  Package [org.xbmc.kore] (d73b0d7):
+    userId=10138 gids=[3003, 1028, 1015]
+    pkg=Package{153cc16e org.xbmc.kore}
+    codePath=/data/app/org.xbmc.kore-1
+    resourcePath=/data/app/org.xbmc.kore-1
+    legacyNativeLibraryDir=/data/app/org.xbmc.kore-1/lib
+    primaryCpuAbi=null
+    secondaryCpuAbi=null
+    versionCode=15 targetSdk=25
+    versionName=v2.2.0-5-g83e9665
+    splits=[base]
+    applicationInfo=ApplicationInfo{2bd0c856 org.xbmc.kore}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    pkgFlagsEx=[ ]
+    dataDir=/data/data/org.xbmc.kore
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      com.sec.android.app.multiwindow
+    timeStamp=2017-02-14 14:35:48
+    firstInstallTime=2017-02-14 14:35:49
+    lastUpdateTime=2017-02-14 14:35:49
+    signatures=PackageSignatures{176dfdc4 [6bef4ad]}
+    permissionsFixed=true haveGids=true installStatus=1
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]
+    User 0:  installed=true hidden=false stopped=true notLaunched=false enabled=0
+    grantedPermissions:
+      android.permission.CHANGE_WIFI_MULTICAST_STATE
+      android.permission.INTERNET
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.READ_PHONE_STATE
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.VIBRATE
+      android.permission.ACCESS_WIFI_STATE

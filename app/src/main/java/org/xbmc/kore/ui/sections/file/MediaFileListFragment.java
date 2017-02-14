@@ -15,8 +15,11 @@
  */
 package org.xbmc.kore.ui.sections.file;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
@@ -34,12 +37,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xbmc.kore.R;
+import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.ApiCallback;
 import org.xbmc.kore.jsonrpc.HostConnection;
 import org.xbmc.kore.jsonrpc.method.Files;
 import org.xbmc.kore.jsonrpc.method.Player;
 import org.xbmc.kore.jsonrpc.method.Playlist;
+import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.ItemType;
 import org.xbmc.kore.jsonrpc.type.ListType;
 import org.xbmc.kore.jsonrpc.type.PlayerType;
@@ -49,6 +54,7 @@ import org.xbmc.kore.utils.LogUtils;
 import org.xbmc.kore.utils.UIUtils;
 import org.xbmc.kore.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -501,7 +507,45 @@ public class MediaFileListFragment extends AbstractListFragment {
                                         queueMediaFile(loc.file);
                                         return true;
                                     case R.id.action_play_item:
-                                        playMediaFile(loc.file);
+                                        //playMediaFile(loc.file);
+                                        hostManager = HostManager.getInstance(getActivity());
+                                        final HostInfo hostInfo = hostManager.getHostInfo();
+                                        final HostConnection httpHostConnection = new HostConnection(hostInfo);
+                                        httpHostConnection.setProtocol(HostConnection.PROTOCOL_HTTP);
+                                        Files.PrepareDownload action = new Files.PrepareDownload(loc.file);
+                                        action.execute(httpHostConnection, new ApiCallback<FilesType.PrepareDownloadReturnType>() {
+                                            @Override
+                                            public void onSuccess(FilesType.PrepareDownloadReturnType result) {
+
+
+                                                // Ok, we got the path, invoke downloader
+                                                Uri uri = Uri.parse(hostInfo.getHttpURL() + "/" + result.path);
+                                                int vlcRequestCode = 42;
+                                                //Uri uri = Uri.parse("http://jell.yfish.us/media/jellyfish-3-mbps-hd-h264.mkv");
+                                                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                                                //vlcIntent.setPackage("org.videolan.vlc");
+                                                //vlcIntent.setData(uri);
+                                                //vlcIntent.setType("video/h264");
+                                                vlcIntent.setDataAndTypeAndNormalize(uri, "video/*");
+                                                //vlcIntent.putExtra("title", "Kung Fury");
+                                                //vlcIntent.putExtra("from_start", false);
+                                                //vlcIntent.putExtra("position", 90000l);
+                                                //vlcIntent.putExtra("subtitles_location", "/sdcard/Movies/Fifty-Fifty.srt");
+                                                //((Activity) context).startActivityForResult(vlcIntent, vlcRequestCode);
+                                                startActivity(vlcIntent);
+
+                                            }
+                                            @Override
+                                            public void onError(int errorCode, String description) {
+
+                                            }
+                                        }, callbackHandler);
+                                        /*
+                                        Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                                        vlcIntent.setDataAndTypeAndNormalize(Uri.parse(loc.file), "video/*");
+                                        startActivity(vlcIntent);
+                                        return true;
+                                        */
                                         return true;
                                     case R.id.action_play_from_this_item:
                                         mediaQueueFileLocation.clear();

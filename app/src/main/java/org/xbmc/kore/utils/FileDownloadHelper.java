@@ -15,8 +15,10 @@
  */
 package org.xbmc.kore.utils;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -380,6 +382,30 @@ public class FileDownloadHelper {
 
                 // Ok, we got the path, invoke downloader
                 Uri uri = Uri.parse(hostInfo.getHttpURL() + "/" + result.path);
+                int vlcRequestCode = 42;
+                //Uri uri = Uri.parse("http://jell.yfish.us/media/jellyfish-3-mbps-hd-h264.mkv");
+                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                //vlcIntent.setPackage("org.videolan.vlc");
+                //vlcIntent.setData(uri);
+                //vlcIntent.setType("video/h264");
+                vlcIntent.setDataAndTypeAndNormalize(uri, "video/*");
+                //vlcIntent.putExtra("title", "Kung Fury");
+                //vlcIntent.putExtra("from_start", false);
+                //vlcIntent.putExtra("position", 90000l);
+                //vlcIntent.putExtra("subtitles_location", "/sdcard/Movies/Fifty-Fifty.srt");
+                //((Activity) context).startActivityForResult(vlcIntent, vlcRequestCode);
+                ((Activity) context).startActivity(vlcIntent);
+                /*
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                uri = Uri.parse("http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hls/uk/abr_hdtv/ak/bbc_one_hd.m3u8");
+                intent.setData(uri);
+                intent.setType("video/*");
+
+                if (intent.resolveActivity(context.getPackageManager()) != null) {
+                    context.startActivity(intent);
+                }
+                */
+                /*
                 DownloadManager.Request request = new DownloadManager.Request(uri);
                 // http basic authorization
                 if ((hostInfo.getUsername() != null) && !hostInfo.getUsername().isEmpty() &&
@@ -396,6 +422,7 @@ public class FileDownloadHelper {
                 request.setDestinationInExternalPublicDir(mediaInfo.getExternalPublicDirType(),
                         mediaInfo.getRelativeFilePath());
                 downloadManager.enqueue(request);
+                */
             }
 
             @Override

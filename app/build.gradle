@@ -16,9 +16,9 @@ android {
 
     defaultConfig {
         applicationId "org.xbmc.kore"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
-        versionCode 15
+        versionCode 16
         versionName = getVersionName()
     }
 
