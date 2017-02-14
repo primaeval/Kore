@@ -508,6 +508,12 @@ public class MediaFileListFragment extends AbstractListFragment {
                                         return true;
                                     case R.id.action_play_item:
                                         //playMediaFile(loc.file);
+                                        if (loc.file.startsWith("http")) {
+                                            Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                                            vlcIntent.setDataAndTypeAndNormalize(Uri.parse(loc.file), "video/*");
+                                            startActivity(vlcIntent);
+                                            return true;
+                                        }
                                         hostManager = HostManager.getInstance(getActivity());
                                         final HostInfo hostInfo = hostManager.getHostInfo();
                                         final HostConnection httpHostConnection = new HostConnection(hostInfo);
@@ -516,36 +522,16 @@ public class MediaFileListFragment extends AbstractListFragment {
                                         action.execute(httpHostConnection, new ApiCallback<FilesType.PrepareDownloadReturnType>() {
                                             @Override
                                             public void onSuccess(FilesType.PrepareDownloadReturnType result) {
-
-
-                                                // Ok, we got the path, invoke downloader
                                                 Uri uri = Uri.parse(hostInfo.getHttpURL() + "/" + result.path);
-                                                int vlcRequestCode = 42;
-                                                //Uri uri = Uri.parse("http://jell.yfish.us/media/jellyfish-3-mbps-hd-h264.mkv");
                                                 Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
-                                                //vlcIntent.setPackage("org.videolan.vlc");
-                                                //vlcIntent.setData(uri);
-                                                //vlcIntent.setType("video/h264");
                                                 vlcIntent.setDataAndTypeAndNormalize(uri, "video/*");
-                                                //vlcIntent.putExtra("title", "Kung Fury");
-                                                //vlcIntent.putExtra("from_start", false);
-                                                //vlcIntent.putExtra("position", 90000l);
-                                                //vlcIntent.putExtra("subtitles_location", "/sdcard/Movies/Fifty-Fifty.srt");
-                                                //((Activity) context).startActivityForResult(vlcIntent, vlcRequestCode);
                                                 startActivity(vlcIntent);
-
                                             }
                                             @Override
                                             public void onError(int errorCode, String description) {
 
                                             }
                                         }, callbackHandler);
-                                        /*
-                                        Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
-                                        vlcIntent.setDataAndTypeAndNormalize(Uri.parse(loc.file), "video/*");
-                                        startActivity(vlcIntent);
-                                        return true;
-                                        */
                                         return true;
                                     case R.id.action_play_from_this_item:
                                         mediaQueueFileLocation.clear();
