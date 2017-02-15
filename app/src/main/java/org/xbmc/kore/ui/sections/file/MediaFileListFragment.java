@@ -507,7 +507,9 @@ public class MediaFileListFragment extends AbstractListFragment {
                                         queueMediaFile(loc.file);
                                         return true;
                                     case R.id.action_play_item:
-                                        //playMediaFile(loc.file);
+                                        playMediaFile(loc.file);
+                                        return true;
+                                    case R.id.action_play_local_item:
                                         if (loc.file.startsWith("http")) {
                                             Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
                                             vlcIntent.setDataAndTypeAndNormalize(Uri.parse(loc.file), "video/*");

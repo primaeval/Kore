@@ -397,5 +397,6 @@
     <string name="by_artist">By artist</string>
     <string name="by_artist_and_year">By artist and year</string>
     <string name="muted">muted</string>
+    <string name="play_locally">Play Locally</string>
 
 </resources>

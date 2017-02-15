@@ -92,6 +92,13 @@
                         android:layout_weight="1"
                         android:layout_height="match_parent"/>
                     <ImageButton
+                        android:id="@+id/play_local"
+                        android:layout_width="@dimen/buttonbar_button_width"
+                        android:layout_height="match_parent"
+                        style="@style/Widget.Button.Borderless"
+                        android:src="?attr/iconPlay"
+                        android:contentDescription="@string/play_locally"/>
+                    <ImageButton
                         android:id="@+id/add_to_playlist"
                         android:layout_width="@dimen/buttonbar_button_width"
                         android:layout_height="match_parent"

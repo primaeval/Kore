@@ -16,6 +16,7 @@
 package org.xbmc.kore.ui.sections.video;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -45,11 +46,16 @@ import com.melnykov.fab.ObservableScrollView;
 
 import org.xbmc.kore.R;
 import org.xbmc.kore.Settings;
+import org.xbmc.kore.host.HostInfo;
+import org.xbmc.kore.host.HostManager;
 import org.xbmc.kore.jsonrpc.ApiCallback;
+import org.xbmc.kore.jsonrpc.HostConnection;
 import org.xbmc.kore.jsonrpc.event.MediaSyncEvent;
+import org.xbmc.kore.jsonrpc.method.Files;
 import org.xbmc.kore.jsonrpc.method.Player;
 import org.xbmc.kore.jsonrpc.method.Playlist;
 import org.xbmc.kore.jsonrpc.method.VideoLibrary;
+import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.PlaylistType;
 import org.xbmc.kore.provider.MediaContract;
 import org.xbmc.kore.service.library.LibrarySyncService;
@@ -367,7 +373,36 @@ public class TVShowEpisodeDetailsFragment extends AbstractDetailsFragment
         // (will be properly updated and refreshed after the refresh callback ends)
         setupSeenButton(newPlaycount);
     }
+    @OnClick(R.id.play_local)
+    public void onPlayLocalClicked(View v) {
+        String filename = tvshowDownloadInfo.fileName;
+        if (filename.startsWith("http")) {
+            Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+            vlcIntent.setDataAndTypeAndNormalize(Uri.parse(filename), "video/*");
+            startActivity(vlcIntent);
+            return;
+        }
+        HostManager hostManager = HostManager.getInstance(getActivity());
+        final HostInfo hostInfo = hostManager.getHostInfo();
+        final HostConnection httpHostConnection = new HostConnection(hostInfo);
+        httpHostConnection.setProtocol(HostConnection.PROTOCOL_HTTP);
+        Files.PrepareDownload action = new Files.PrepareDownload(filename);
+        action.execute(httpHostConnection, new ApiCallback<FilesType.PrepareDownloadReturnType>() {
+            @Override
+            public void onSuccess(FilesType.PrepareDownloadReturnType result) {
+                Uri uri = Uri.parse(hostInfo.getHttpURL() + "/" + result.path);
+                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                vlcIntent.setDataAndTypeAndNormalize(uri, "video/*");
+                startActivity(vlcIntent);
+            }
+            @Override
+            public void onError(int errorCode, String description) {
 
+            }
+        }, callbackHandler);
+        return;
+    }
+    
     @Override
     protected void onDownload() {
         if (tvshowDownloadInfo == null) {
