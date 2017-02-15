@@ -402,7 +402,7 @@ public class TVShowEpisodeDetailsFragment extends AbstractDetailsFragment
         }, callbackHandler);
         return;
     }
-    
+
     @Override
     protected void onDownload() {
         if (tvshowDownloadInfo == null) {

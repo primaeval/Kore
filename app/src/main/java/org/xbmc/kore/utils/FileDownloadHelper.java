@@ -15,10 +15,8 @@
  */
 package org.xbmc.kore.utils;
 
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -142,8 +140,8 @@ public class FileDownloadHelper {
         public String getDownloadFileName() {
             String ext = getFilenameExtension(fileName);
             return (ext != null) ?
-                   String.valueOf(track) + " - " + title + ext :
-                   null;
+                    String.valueOf(track) + " - " + title + ext :
+                    null;
         }
 
         public String getExternalPublicDirType() {
@@ -168,13 +166,13 @@ public class FileDownloadHelper {
 
         public String getRelativeDirectoryPath() {
             return (TextUtils.isEmpty(title)) ?
-                   NO_MOVIE_TITLE_DIR : title;
+                    NO_MOVIE_TITLE_DIR : title;
         }
 
         public String getDownloadFileName() {
             String ext = getFilenameExtension(fileName);
             return (ext != null) ?
-                   title + ext : null;
+                    title + ext : null;
         }
 
         public String getExternalPublicDirType() {
@@ -208,17 +206,17 @@ public class FileDownloadHelper {
         public String getRelativeDirectoryPath() {
             if (season > 0) {
                 return (TextUtils.isEmpty(tvshowTitle)) ?
-                       NO_TVSHOW_TITLE_DIR : tvshowTitle + "/Season" + String.valueOf(season);
+                        NO_TVSHOW_TITLE_DIR : tvshowTitle + "/Season" + String.valueOf(season);
             } else {
                 return (TextUtils.isEmpty(tvshowTitle)) ?
-                       NO_TVSHOW_TITLE_DIR : tvshowTitle;
+                        NO_TVSHOW_TITLE_DIR : tvshowTitle;
             }
         }
 
         public String getDownloadFileName() {
             String ext = getFilenameExtension(fileName);
             return (ext != null) ?
-                   String.valueOf(episodeNumber) + " - " + title + ext : null;
+                    String.valueOf(episodeNumber) + " - " + title + ext : null;
         }
 
         public String getExternalPublicDirType() {
@@ -245,13 +243,13 @@ public class FileDownloadHelper {
 
         public String getRelativeDirectoryPath() {
             return (TextUtils.isEmpty(title)) ?
-                   null : SUBDIRECTORY + "/" + title;
+                    null : SUBDIRECTORY + "/" + title;
         }
 
         public String getDownloadFileName() {
             String ext = getFilenameExtension(fileName);
             return (ext != null) ?
-                   title + ext : null;
+                    title + ext : null;
         }
 
         public String getExternalPublicDirType() {
@@ -301,15 +299,15 @@ public class FileDownloadHelper {
             @Override
             public void onError(int errorCode, String description) {
                 Toast.makeText(context, R.string.unable_to_connect_to_xbmc, Toast.LENGTH_SHORT)
-                     .show();
+                        .show();
             }
         }, callbackHandler);
     }
 
     public static void downloadFiles(final Context context, final HostInfo hostInfo,
-                                    final List<? extends MediaInfo> mediaInfoList,
-                                    final int fileHandlingMode,
-                                    final Handler callbackHandler) {
+                                     final List<? extends MediaInfo> mediaInfoList,
+                                     final int fileHandlingMode,
+                                     final Handler callbackHandler) {
         if ((mediaInfoList == null) || (mediaInfoList.isEmpty()))
             return;
 
@@ -347,14 +345,14 @@ public class FileDownloadHelper {
             Toast.makeText(context,
                     "Download directory already exists and is not a directory.",
                     Toast.LENGTH_SHORT)
-                 .show();
+                    .show();
             return false;
         }
         if (!downloadDir.isDirectory() && !downloadDir.mkdirs()) {
             Toast.makeText(context,
                     "Couldn't create download directory: " + downloadDir.getPath(),
                     Toast.LENGTH_SHORT)
-                 .show();
+                    .show();
             return false;
         }
         return true;
@@ -382,36 +380,12 @@ public class FileDownloadHelper {
 
                 // Ok, we got the path, invoke downloader
                 Uri uri = Uri.parse(hostInfo.getHttpURL() + "/" + result.path);
-                int vlcRequestCode = 42;
-                //Uri uri = Uri.parse("http://jell.yfish.us/media/jellyfish-3-mbps-hd-h264.mkv");
-                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
-                //vlcIntent.setPackage("org.videolan.vlc");
-                //vlcIntent.setData(uri);
-                //vlcIntent.setType("video/h264");
-                vlcIntent.setDataAndTypeAndNormalize(uri, "video/*");
-                //vlcIntent.putExtra("title", "Kung Fury");
-                //vlcIntent.putExtra("from_start", false);
-                //vlcIntent.putExtra("position", 90000l);
-                //vlcIntent.putExtra("subtitles_location", "/sdcard/Movies/Fifty-Fifty.srt");
-                //((Activity) context).startActivityForResult(vlcIntent, vlcRequestCode);
-                ((Activity) context).startActivity(vlcIntent);
-                /*
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                uri = Uri.parse("http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hls/uk/abr_hdtv/ak/bbc_one_hd.m3u8");
-                intent.setData(uri);
-                intent.setType("video/*");
-
-                if (intent.resolveActivity(context.getPackageManager()) != null) {
-                    context.startActivity(intent);
-                }
-                */
-                /*
                 DownloadManager.Request request = new DownloadManager.Request(uri);
                 // http basic authorization
                 if ((hostInfo.getUsername() != null) && !hostInfo.getUsername().isEmpty() &&
-                    (hostInfo.getPassword() != null) && !hostInfo.getPassword().isEmpty()) {
+                        (hostInfo.getPassword() != null) && !hostInfo.getPassword().isEmpty()) {
                     final String token = Base64.encodeToString((hostInfo.getUsername() + ":" +
-                                                                hostInfo.getPassword()).getBytes(), Base64.DEFAULT);
+                            hostInfo.getPassword()).getBytes(), Base64.DEFAULT);
                     request.addRequestHeader("Authorization", "Basic " + token);
                 }
                 request.allowScanningByMediaScanner();
@@ -422,7 +396,6 @@ public class FileDownloadHelper {
                 request.setDestinationInExternalPublicDir(mediaInfo.getExternalPublicDirType(),
                         mediaInfo.getRelativeFilePath());
                 downloadManager.enqueue(request);
-                */
             }
 
             @Override
@@ -431,7 +404,7 @@ public class FileDownloadHelper {
                         String.format(context.getString(R.string.error_getting_file_information),
                                 mediaInfo.getDownloadTitle(context)),
                         Toast.LENGTH_SHORT)
-                     .show();
+                        .show();
             }
         }, callbackHandler);
     }
