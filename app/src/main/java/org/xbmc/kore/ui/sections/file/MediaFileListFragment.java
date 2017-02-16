@@ -531,7 +531,9 @@ public class MediaFileListFragment extends AbstractListFragment {
                                             }
                                             @Override
                                             public void onError(int errorCode, String description) {
-
+                                                Toast.makeText(ctx,R.string.cant_play_locally,
+                                                        Toast.LENGTH_SHORT)
+                                                        .show();
                                             }
                                         }, callbackHandler);
                                         return true;

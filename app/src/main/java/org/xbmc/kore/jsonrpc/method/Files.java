@@ -18,11 +18,14 @@ package org.xbmc.kore.jsonrpc.method;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.xbmc.kore.eventclient.EventServerConnection;
 import org.xbmc.kore.jsonrpc.ApiException;
 import org.xbmc.kore.jsonrpc.ApiMethod;
 import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.ItemType;
 import org.xbmc.kore.jsonrpc.type.ListType;
+import org.xbmc.kore.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.List;
  * All JSON RPC methods in Files.*
  */
 public class Files {
-
+    private static final String TAG = LogUtils.makeLogTag(Files.class);
     /**
      * Prepare Download
      * Provides a way to download a given file (e.g. providing an URL to the real file location)
@@ -157,6 +160,12 @@ public class Files {
             ArrayNode items = (ArrayNode) fileNode;
             ArrayList<ListType.ItemFile> result = new ArrayList<ListType.ItemFile>(items.size());
             for (JsonNode item : items) {
+                String regex = "\\[.*?\\]";
+                JsonNode label = item.get("label");
+                if (!label.isNull()) {
+                    String new_label = label.textValue().replaceAll(regex, "");
+                    ((ObjectNode) item).put("label", new_label);
+                }
                 result.add(new ListType.ItemFile(item));
             }
             return result;

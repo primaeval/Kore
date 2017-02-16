@@ -15,6 +15,7 @@
  */
 package org.xbmc.kore.ui.sections.video;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -397,7 +398,10 @@ public class TVShowEpisodeDetailsFragment extends AbstractDetailsFragment
             }
             @Override
             public void onError(int errorCode, String description) {
-
+                Context context = getActivity();
+                Toast.makeText(context,R.string.cant_play_locally,
+                        Toast.LENGTH_SHORT)
+                        .show();
             }
         }, callbackHandler);
         return;
