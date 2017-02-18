@@ -24,4 +24,8 @@
         android:title="@string/add_to_playlist"
           android:orderInCategory="2"
           app:showAsAction="never" />
+    <item android:id="@+id/action_play_locally"
+        android:title="@string/play_locally"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
 </menu>

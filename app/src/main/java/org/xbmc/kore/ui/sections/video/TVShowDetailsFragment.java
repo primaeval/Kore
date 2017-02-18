@@ -17,11 +17,13 @@ package org.xbmc.kore.ui.sections.video;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.BaseColumns;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -40,11 +42,17 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xbmc.kore.R;
 import org.xbmc.kore.Settings;
+import org.xbmc.kore.host.HostInfo;
 import org.xbmc.kore.host.HostManager;
+import org.xbmc.kore.jsonrpc.ApiCallback;
+import org.xbmc.kore.jsonrpc.HostConnection;
 import org.xbmc.kore.jsonrpc.event.MediaSyncEvent;
+import org.xbmc.kore.jsonrpc.method.Files;
+import org.xbmc.kore.jsonrpc.type.FilesType;
 import org.xbmc.kore.jsonrpc.type.PlaylistType;
 import org.xbmc.kore.jsonrpc.type.VideoType;
 import org.xbmc.kore.provider.MediaContract;
@@ -459,6 +467,37 @@ public class TVShowDetailsFragment extends AbstractDetailsFragment
                             return true;
                         case R.id.action_queue:
                             MediaPlayerUtils.queue(TVShowDetailsFragment.this, playListItem, PlaylistType.GetPlaylistsReturnType.VIDEO);
+                            return true;
+                        case R.id.action_play_locally:
+                            String filename = playListItem.file;
+                            if (filename.startsWith("http")) {
+                                Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                                vlcIntent.setDataAndTypeAndNormalize(Uri.parse(filename), "video/*");
+                                startActivity(vlcIntent);
+                                return true;
+                            }
+                            HostManager hostManager = HostManager.getInstance(getActivity());
+                            final HostInfo hostInfo = hostManager.getHostInfo();
+                            final HostConnection httpHostConnection = new HostConnection(hostInfo);
+                            httpHostConnection.setProtocol(HostConnection.PROTOCOL_HTTP);
+                            Files.PrepareDownload action = new Files.PrepareDownload(filename);
+                            Handler callbackHandler = new Handler();
+                            action.execute(httpHostConnection, new ApiCallback<FilesType.PrepareDownloadReturnType>() {
+                                @Override
+                                public void onSuccess(FilesType.PrepareDownloadReturnType result) {
+                                    Uri uri = Uri.parse(hostInfo.getHttpURL() + "/" + result.path);
+                                    Intent vlcIntent = new Intent(Intent.ACTION_VIEW);
+                                    vlcIntent.setDataAndTypeAndNormalize(uri, "video/*");
+                                    startActivity(vlcIntent);
+                                }
+                                @Override
+                                public void onError(int errorCode, String description) {
+                                    Context context = getActivity();
+                                    Toast.makeText(context,R.string.cant_play_locally,
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }, callbackHandler);
                             return true;
                     }
                     return false;
