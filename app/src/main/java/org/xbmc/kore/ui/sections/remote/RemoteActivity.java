@@ -374,6 +374,8 @@ public class RemoteActivity extends BaseActivity
                 videoUrl = "plugin://plugin.video.svtplay/?url=%2Fvideo%2F" + URLEncoder.encode(videoId) + "&mode=video";
             } else if (videoUri.getHost().endsWith("vimeo.com")) {
                 videoUrl = "plugin://plugin.video.vimeo?video_id=" + videoId;
+            } else if (videoUri.getHost().endsWith("bbc.co.uk")) {
+                videoUrl = "plugin://plugin.video.bbc/play_episode/" + URLEncoder.encode(videoId) + "/name/DefaultFolder.png/autoplay" ;
             } else {
                 videoUrl = "plugin://plugin.video.youtube/play/?video_id=" + videoId;
             }
@@ -522,10 +524,13 @@ public class RemoteActivity extends BaseActivity
      * @return Youtube/Vimeo Video ID
      */
     private String getVideoId(Uri playuri) {
-        if (playuri.getHost().endsWith("svtplay.se") || playuri.getHost().endsWith("youtube.com") || playuri.getHost().endsWith("youtu.be") || playuri.getHost().endsWith("vimeo.com")) {
+        if (playuri.getHost().endsWith("bbc.co.uk") || playuri.getHost().endsWith("svtplay.se") || playuri.getHost().endsWith("youtube.com") || playuri.getHost().endsWith("youtu.be") || playuri.getHost().endsWith("vimeo.com")) {
             // We'll need to get the v= parameter from the URL
             final Pattern pattern;
-            if (playuri.getHost().endsWith("svtplay.se")) {
+            if (playuri.getHost().endsWith("bbc.co.uk")) {
+                pattern = Pattern.compile("^(https?:\\/\\/www\\.bbc\\.co\\.uk\\/iplayer\\/episode\\/.*)",
+                        Pattern.CASE_INSENSITIVE);
+            } else if (playuri.getHost().endsWith("svtplay.se")) {
                 pattern = Pattern.compile("^(?:https?:\\/\\/)?(?:www\\.)?svtplay\\.se\\/video\\/(\\d+\\/.*)",
                         Pattern.CASE_INSENSITIVE);
             } else if (playuri.getHost().endsWith("vimeo.com")) {

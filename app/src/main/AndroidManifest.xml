@@ -49,6 +49,7 @@
                 <data android:host="www.vimeo.com"/>
                 <data android:host="player.vimeo.com"/>
                 <data android:host="www.svtplay.se"/>
+                <data android:host="www.bbc.co.uk"/>
             </intent-filter>
         </activity>
 
