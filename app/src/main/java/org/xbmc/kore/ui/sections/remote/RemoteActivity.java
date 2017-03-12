@@ -375,7 +375,8 @@ public class RemoteActivity extends BaseActivity
             } else if (videoUri.getHost().endsWith("vimeo.com")) {
                 videoUrl = "plugin://plugin.video.vimeo?video_id=" + videoId;
             } else if (videoUri.getHost().endsWith("bbc.co.uk")) {
-                videoUrl = "plugin://plugin.video.bbc/play_episode/" + URLEncoder.encode(videoId) + "/name/DefaultFolder.png/autoplay" ;
+                //videoUrl = "plugin://plugin.video.bbc/play_episode/" + URLEncoder.encode(videoId) + "/name/DefaultFolder.png/autoplay" ;
+                videoUrl = "plugin://plugin.video.iplayerwww?mode=202&url=" + URLEncoder.encode(videoId);
             } else {
                 videoUrl = "plugin://plugin.video.youtube/play/?video_id=" + videoId;
             }
